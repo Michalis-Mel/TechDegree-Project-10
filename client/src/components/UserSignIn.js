@@ -1,82 +1,69 @@
 import React, { useState, useContext } from "react";
 import { NavLink, useHistory } from "react-router-dom";
-import { Context } from "../Context";
-import Form from "./Form";
+import { Consumer } from "../Context";
 
 const UserSignIn = (props) => {
   const history = useHistory();
-  const context = useContext(Context);
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
-  const [name, setName] = useState("");
 
   const change = (event) => {
-    const name = event.target.name;
+    let name = event.target.name;
     const value = event.target.value;
-    setName(value);
+    if ((name = emailAddress)) {
+      setEmailAddress(value);
+    } else if ((name = password)) {
+      setPassword(value);
+    }
   };
 
-  const submit = () => {
-    const from = history.state || { from: { pathname: "/" } };
-
-    context.actions
-      .signIn(emailAddress, password)
-      .then((user) => {
-        if (user === null) {
-          setErrors("Sign-in was unsuccessful");
-        } else {
-          history.push(from);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        history.push("/error");
-      });
-  };
-
-  const cancel = () => {
-    history.push("/");
-  };
   return (
-    <div className="bounds">
-      <div className="grid-33 centered signin">
-        <h1>Sign In</h1>
-        <div>
-          <Form
-            cancel={cancel}
-            errors={errors}
-            submit={submit}
-            elements={() => (
-              <>
-                <input
-                  id="emailAddress"
-                  name="emailAddress"
-                  type="text"
-                  value={emailAddress}
-                  onChange={change}
-                  placeholder="Email Address"
-                />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={change}
-                  placeholder="Password"
-                />
-              </>
-            )}
-          />
+    <Consumer>
+      {({ signIn }) => (
+        <div className="bounds">
+          <div className="grid-33 centered signin">
+            <h1>Sign In</h1>
+            <div>
+              <form onSubmit={(e) => signIn(e, emailAddress, password)}>
+                <div>
+                  <input
+                    id="emailAddress"
+                    name="emailAddress"
+                    type="text"
+                    placeholder="Email Address"
+                    onChange={change}
+                  />
+                </div>
+                <div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    onChange={change}
+                  />
+                </div>
+                <div className="grid-100 pad-bottom">
+                  <button className="button" type="submit">
+                    Sign In
+                  </button>
+                  <button className="button button-secondary">
+                    <NavLink to="/">Cancel</NavLink>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <p>&nbsp;</p>
+            <p>
+              Don't have a user account?{" "}
+              <NavLink to="/sign-up">Click here</NavLink> to sign up!
+            </p>
+          </div>
         </div>
-        <p>&nbsp;</p>
-        <p>
-          Don't have a user account? <NavLink to="/signup">Click here</NavLink>{" "}
-          to sign up!
-        </p>
-      </div>
-    </div>
+      )}
+    </Consumer>
   );
 };
 
