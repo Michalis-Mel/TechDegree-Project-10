@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Courses from "./components/Courses";
 import CourseDetail from "./components/CourseDetail";
+import UserSignIn from "./components/UserSignIn";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Courses} />
           <Route path="/courses/:id" component={CourseDetail} />
+          <Route path="/sign-in" component={UserSignIn} />
         </Switch>
       </Router>
     </div>

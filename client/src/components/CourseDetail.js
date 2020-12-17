@@ -8,25 +8,26 @@ const CourseDetail = () => {
   //State
   const [oneCourse, setOneCourse] = useState([]);
 
+  //Fetch the data
+  const getOneCourse = () => {
+    axios
+      .get(`http://localhost:5000/api/courses/${id}`)
+      .then((response) => {
+        const course = response.data;
+        return course;
+      })
+      .then((course) => {
+        setOneCourse(course);
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          console.log("Unable to get course details");
+        }
+      });
+  };
+
+  // Update the courses state when the the page renders
   useEffect(() => {
-    // Update the courses state when the the page renders
-    //Fetch the data
-    const getOneCourse = () => {
-      axios
-        .get(`http://localhost:5000/api/courses/${id}`)
-        .then((response) => {
-          const course = response.data;
-          return course;
-        })
-        .then((course) => {
-          setOneCourse(course);
-        })
-        .catch((error) => {
-          if (error.status === 404) {
-            console.log("Unable to get course details");
-          }
-        });
-    };
     getOneCourse();
   }, []);
 
@@ -55,9 +56,7 @@ const CourseDetail = () => {
             <div className="course--header">
               <h4 className="course--label">Course</h4>
               <h3 className="course--title">{oneCourse.title}</h3>
-              <p>
-                By {oneCourse.User.firstName} {oneCourse.User.lastName}
-              </p>
+              <p>By Sally Jones</p>
             </div>
             <div className="course--description">{oneCourse.description}</div>
           </div>
