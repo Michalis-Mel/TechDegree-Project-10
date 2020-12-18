@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { Consumer } from "../Context";
-import axios from "axios";
+import React, { useState, useContext } from "react";
+import { NavLink, useHistory } from "react-router-dom";
+import Form from "./Form";
+import { MyContext } from "../Context";
 
 const UserSignUp = () => {
+  const history = useHistory();
+  const context = useContext(MyContext);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState([]);
 
-  const handleChange = ({ target: { name, value } }) => {
+  const change = ({ target: { name, value } }) => {
     switch (name) {
       case firstName:
         setFirstName(value);
@@ -32,113 +36,92 @@ const UserSignUp = () => {
     }
   };
 
-  const handleSignUp = (event, signIn) => {
-    if (event) {
-      event.preventDefault();
-    }
+  const Submit = () => {
+    // Create user
+    const user = {
+      firstName,
+      lastName,
+      emailAddress,
+      password,
+      confirmPassword,
+    };
 
-    if (password === "") {
-      console.log("Please enter a password");
-    } else if (password !== confirmPassword) {
-      console.log("passwords do not match");
-    } else {
-      axios({
-        method: "POST",
-        url: "http://localhost:5000/api/users",
-        data: {
-          firstName: firstName,
-          lastName: lastName,
-          emailAddress: emailAddress,
-          password: password,
-          confirmPassword: confirmPassword,
-        },
+    context.data.__proto__
+      .createUser(user)
+      .then((errors) => {
+        if (errors.length) {
+          setError({ errors });
+        } else {
+          context.actions.signIn(emailAddress, password).then(() => {
+            history.push("/authenticated");
+          });
+        }
       })
-        .then((res) => {
-          if (res.status === 201) {
-            signIn(null, emailAddress, password);
-          }
-        })
-        .catch((err) => console.log("error fetching data", err));
-    }
+      .catch((err) => {
+        console.log(err);
+        history.push("/error");
+      });
+  };
+
+  const cancel = () => {
+    history.push("/");
   };
 
   return (
-    <Consumer>
-      {({ signIn }) => (
-        <div className="bounds">
-          <div className="grid-33 centered signin">
-            <h1>Sign Up</h1>
-            <div>
-              <form onSubmit={(event) => handleSignUp(event, signIn)}>
-                <div>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    className=""
-                    placeholder="First Name"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    className=""
-                    placeholder="Last Name"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <input
-                    id="emailAddress"
-                    name="emailAddress"
-                    type="text"
-                    className=""
-                    placeholder="Email Address"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    className=""
-                    placeholder="Password"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    className=""
-                    placeholder="Confirm Password"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="grid-100 pad-bottom">
-                  <button className="button" type="submit">
-                    Sign Up
-                  </button>
-                  <button className="button button-secondary">
-                    <NavLink to="/">Cancel</NavLink>
-                  </button>
-                </div>
-              </form>
-            </div>
-            <p>&nbsp;</p>
-            <p>
-              Already have a user account?{" "}
-              <NavLink to="/sign-in">Click here</NavLink> to sign in!
-            </p>
-          </div>
-        </div>
-      )}
-    </Consumer>
+    <div className="bounds">
+      <div className="grid-33 centered signin">
+        <h1>Sign Up</h1>
+        <Form
+          cancel={cancel}
+          error={error}
+          submit={Submit}
+          elements={() => (
+            <React.Fragment>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                onChange={change}
+                placeholder="First Name"
+              />
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                onChange={change}
+                placeholder="Last Name"
+              />
+              <input
+                id="emailAddress"
+                name="emailAddress"
+                type="email"
+                onChange={change}
+                placeholder="Email Address"
+              />
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                onChange={change}
+                placeholder="Password"
+              />
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                onChange={change}
+                placeholder="Confirm Password"
+              />
+            </React.Fragment>
+          )}
+        />
+        <p>
+          Already have a user account?{" "}
+          <NavLink to="/sign-in">Click here</NavLink> to sign in!
+        </p>
+      </div>
+    </div>
   );
 };
 

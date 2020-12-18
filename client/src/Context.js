@@ -3,12 +3,11 @@ import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 import Cookies from "js-cookie";
+import Data from "./Data";
 
 export const MyContext = React.createContext();
 
-export const Consumer = MyContext.Consumer;
-
-const Provider = (props) => {
+export const Provider = (props) => {
   const history = useHistory();
 
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
@@ -16,6 +15,8 @@ const Provider = (props) => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const data = new Data();
 
   const handleSignIn = (e, emailAddress, password) => {
     if (e) {
@@ -75,6 +76,7 @@ const Provider = (props) => {
         isLoggedIn: isLoggedIn,
         signIn: handleSignIn,
         signOut: handleSignOut,
+        data: data,
       }}
     >
       {props.children}
@@ -82,4 +84,14 @@ const Provider = (props) => {
   );
 };
 
-export default Provider;
+export const Consumer = MyContext.Consumer;
+
+export default function withContext(Component) {
+  return function ContextComponent(props) {
+    return (
+      <MyContext.Consumer>
+        {(context) => <Component {...props} context={context} />}
+      </MyContext.Consumer>
+    );
+  };
+}
