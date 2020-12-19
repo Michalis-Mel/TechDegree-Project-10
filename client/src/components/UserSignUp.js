@@ -16,19 +16,19 @@ const UserSignUp = () => {
 
   const change = ({ target: { name, value } }) => {
     switch (name) {
-      case firstName:
+      case "firstName":
         setFirstName(value);
         break;
-      case lastName:
+      case "lastName":
         setLastName(value);
         break;
-      case emailAddress:
+      case "emailAddress":
         setEmailAddress(value);
         break;
-      case password:
+      case "password":
         setPassword(value);
         break;
-      case confirmPassword:
+      case "confirmPassword":
         setConfirmPassword(value);
         break;
       default:
@@ -36,25 +36,22 @@ const UserSignUp = () => {
     }
   };
 
-  const Submit = () => {
+  const Submit = (e) => {
     // Create user
     const user = {
       firstName,
       lastName,
       emailAddress,
       password,
-      confirmPassword,
     };
 
     context.data.__proto__
       .createUser(user)
       .then((errors) => {
-        if (errors.length) {
+        if (errors) {
           setError({ errors });
         } else {
-          context.actions.signIn(emailAddress, password).then(() => {
-            history.push("/authenticated");
-          });
+          context.signIn(e, emailAddress, password);
         }
       })
       .catch((err) => {

@@ -50,7 +50,8 @@ export default class Data {
       return [];
     } else if (response.status === 400) {
       return response.json().then((data) => {
-        return data.errors;
+        console.log(data);
+        return data;
       });
     } else {
       throw new Error();
