@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import Form from "./Form";
-import { MyContext } from "../Context";
+import { MyContext } from "../../Context";
 
 const UserSignUp = () => {
   const history = useHistory();

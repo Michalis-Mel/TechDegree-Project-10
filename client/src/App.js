@@ -6,10 +6,10 @@ import withContext from "./Context";
 
 //Import components
 import Header from "./components/Header";
-import Courses from "./components/Courses";
-import CourseDetail from "./components/CourseDetail";
-import UserSignIn from "./components/UserSignIn";
-import UserSignUp from "./components/UserSignUp";
+import Courses from "./components/courses/Courses";
+import CourseDetail from "./components/courses/CourseDetail";
+import UserSignIn from "./components/users/UserSignIn";
+import UserSignUp from "./components/users/UserSignUp";
 import NotFound from "./components/NotFound";
 
 const UserSignUpWithContext = withContext(UserSignUp);
