@@ -42,7 +42,7 @@ export const Provider = (props) => {
           window.localStorage.setItem("emailAddress", emailAddress);
           window.localStorage.setItem("password", password);
 
-          history.push("/courses");
+          history.push("/");
         }
       })
       .catch((err) => {
@@ -64,7 +64,7 @@ export const Provider = (props) => {
     setIsLoggedIn(false);
     Cookies.remove("authenticatedUser");
 
-    history.push("/courses");
+    history.push("/");
   };
   return (
     <MyContext.Provider

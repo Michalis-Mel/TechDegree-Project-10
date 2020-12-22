@@ -26,9 +26,7 @@ function App() {
         <Route exact path="/courses/:id" component={CourseDetail} />
         <Route path="/sign-in" component={UserSignIn} />
         <Route path="/sign-up" component={UserSignUpWithContext} />
-
         <Route path="/forbidden" component={Forbidden} />
-
         <Route component={NotFound} />
       </Switch>
     </div>
