@@ -9,12 +9,14 @@ import Header from "./components/Header";
 import Courses from "./components/courses/Courses";
 import CourseDetail from "./components/courses/CourseDetail";
 import UserSignIn from "./components/users/UserSignIn";
+import UserSignOut from "./components/users/UserSignOut";
 import UserSignUp from "./components/users/UserSignUp";
 import NotFound from "./components/NotFound";
 import CreateCourse from "./components/courses/CreateCourse";
 import Forbidden from "./components/Forbidden";
 
 const UserSignUpWithContext = withContext(UserSignUp);
+const UserSignOutWithContext = withContext(UserSignOut);
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
         <Route exact path="/courses/:id" component={CourseDetail} />
         <Route path="/sign-in" component={UserSignIn} />
         <Route path="/sign-up" component={UserSignUpWithContext} />
+        <Route path="/sign-out" component={UserSignOutWithContext} />
         <Route path="/forbidden" component={Forbidden} />
         <Route component={NotFound} />
       </Switch>

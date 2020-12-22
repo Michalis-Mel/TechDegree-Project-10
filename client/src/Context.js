@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import axios from "axios";
 import Cookies from "js-cookie";
 import Data from "./Data";
 
@@ -22,15 +21,10 @@ export const Provider = (props) => {
     if (e) {
       e.preventDefault();
     }
-    //      Axios fetch request
-    axios
-      .get("http://localhost:5000/api/users", {
-        auth: {
-          username: emailAddress,
-          password: password,
-        },
-      })
+    data
+      .getUser(emailAddress, password)
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
           let user = res.data;
 
@@ -46,6 +40,7 @@ export const Provider = (props) => {
         }
       })
       .catch((err) => {
+        console.log(err);
         if (err.response.status === 400) {
           history.push("/notfound");
           console.log("Error Parsing and Fetching Data", err);
