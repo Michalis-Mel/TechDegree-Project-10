@@ -11,6 +11,8 @@ import CourseDetail from "./components/courses/CourseDetail";
 import UserSignIn from "./components/users/UserSignIn";
 import UserSignUp from "./components/users/UserSignUp";
 import NotFound from "./components/NotFound";
+import CreateCourse from "./components/courses/CreateCourse";
+import Forbidden from "./components/Forbidden";
 
 const UserSignUpWithContext = withContext(UserSignUp);
 
@@ -20,9 +22,13 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={Courses} />
-        <Route path="/courses/:id" component={CourseDetail} />
+        <Route exact path="/courses/create" component={CreateCourse} />
+        <Route exact path="/courses/:id" component={CourseDetail} />
         <Route path="/sign-in" component={UserSignIn} />
         <Route path="/sign-up" component={UserSignUpWithContext} />
+
+        <Route path="/forbidden" component={Forbidden} />
+
         <Route component={NotFound} />
       </Switch>
     </div>

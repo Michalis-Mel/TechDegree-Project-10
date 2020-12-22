@@ -36,7 +36,7 @@ const UserSignUp = () => {
     }
   };
 
-  const Submit = (e) => {
+  const Submit = () => {
     // Create user
     const user = {
       firstName,
@@ -48,10 +48,10 @@ const UserSignUp = () => {
     context.data.__proto__
       .createUser(user)
       .then((errors) => {
-        if (errors) {
-          setError({ errors });
+        if (errors === 201) {
+          context.signIn(null, emailAddress, password);
         } else {
-          context.signIn(e, emailAddress, password);
+          setError({ errors });
         }
       })
       .catch((err) => {
