@@ -12,7 +12,7 @@ const Forbidden = () => {
           window.location.href = "/";
         }}
       >
-        Return to previous page
+        Return to Home page
       </button>
     </div>
   );

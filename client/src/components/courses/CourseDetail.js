@@ -1,87 +1,139 @@
-import React, { useState, useEffect } from "react";
-import { useParams, NavLink } from "react-router-dom";
+import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 
-const CourseDetail = () => {
-  const { id } = useParams();
+class CourseDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      courses: [],
+    };
+  }
 
-  //State
-  const [oneCourse, setOneCourse] = useState([]);
-
-  //Fetch the data
-  const getOneCourse = () => {
+  componentDidMount() {
     axios
-      .get(`http://localhost:5000/api/courses/${id}`)
+      .get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
       .then((response) => {
-        const course = response.data;
-        return course;
+        const courses = response.data;
+        return courses;
       })
-      .then((course) => {
-        setOneCourse(course);
-      })
+      .then((courses) =>
+        this.setState({
+          courses: [courses],
+        })
+      )
       .catch((error) => {
         if (error.status === 404) {
           console.log("Unable to get course details");
         }
       });
+  }
+
+  //delete button function
+  delete = async (e) => {
+    e.preventDefault();
+    const { context } = this.props;
+
+    const authUser = context.authenticatedUser;
+
+    axios
+      .delete(
+        `http://localhost:5000/api/courses/${this.props.match.params.id}`,
+        {
+          method: "DELETE",
+          auth: {
+            username: `${authUser.emailAddress}`,
+            password: `${authUser.password}`,
+          },
+        }
+      )
+      .then(() => {
+        this.props.history.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        this.props.history.push("/error");
+      });
   };
 
-  // Update the courses state when the the page renders
-  useEffect(() => {
-    getOneCourse();
-  }, []);
+  render() {
+    const { context } = this.props;
+    let authId = null;
+    const authUser = context.authenticatedUser;
+    if (authUser) {
+      const authId = authUser[0].id;
+      console.log(authId);
+    }
+    const { courses } = this.state;
 
-  if (oneCourse) {
     return (
-      <div key={oneCourse.id}>
-        <div className="actions--bar">
-          <div className="bounds">
-            <div className="grid-100">
-              <span>
-                <NavLink className="button" to="update-course.html">
-                  Update Course
-                </NavLink>
-                <NavLink className="button" to="/courses/delete">
-                  Delete Course
-                </NavLink>
-              </span>
-              <NavLink className="button button-secondary" to="/">
-                Return to List
-              </NavLink>
+      <div className="bounds">
+        {courses.map((course) => (
+          <div key={course.id}>
+            <div className="actions--bar">
+              <div className="bounds">
+                <div className="grid-100">
+                  {console.log(authUser)}
+                  {console.log(authId)}
+                  {console.log(course.User.id)}
+                  {authUser && authId === course.User.id && (
+                    <span>
+                      <NavLink
+                        className="button"
+                        to={`/courses/${this.props.match.params.id}/update`}
+                      >
+                        Update Course
+                      </NavLink>
+                      <NavLink
+                        key="1"
+                        className="button"
+                        to="#"
+                        onClick={this.delete}
+                      >
+                        Delete Course
+                      </NavLink>
+                    </span>
+                  )}
+                  <NavLink key="2" className="button button-secondary" to="/">
+                    Return to List
+                  </NavLink>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="bounds course--detail">
-          <div className="grid-66">
-            <div className="course--header">
-              <h4 className="course--label">Course</h4>
-              <h3 className="course--title">{oneCourse.title}</h3>
-              <p>By Sally Jones</p>
-            </div>
-            <div className="course--description">{oneCourse.description}</div>
-          </div>
-          <div className="grid-25 grid-right">
-            <div className="course--stats">
-              <ul className="course--stats--list">
-                <li className="course--stats--list--item">
-                  <h4>Estimated Time</h4>
-                  <h3>{oneCourse.estimatedTime}</h3>
-                </li>
-                <li className="course--stats--list--item">
-                  <h4>Materials Needed</h4>
-                  <ul>
-                    <li>{oneCourse.materialsNeeded}</li>
+            <div className="bounds course--detail">
+              <div className="grid-66">
+                <div className="course--header">
+                  <h4 className="course--label">Course</h4>
+                  <h3 className="course--title">{course.title}</h3>
+                  <p>
+                    By: {course.User.firstName} {course.User.lastName}
+                  </p>
+                </div>
+                <div className="course--description">
+                  <p>{course.description}</p>
+                </div>
+              </div>
+              <div className="grid-25 grid-right">
+                <div className="course--stats">
+                  <ul className="course--stats--list">
+                    <li className="course--stats--list--item">
+                      <h4>Estimated Time</h4>
+                      <h3>{course.estimatedTime}</h3>
+                    </li>
+                    <li className="course--stats--list--item">
+                      <h4>Materials Needed</h4>
+                      <ul>
+                        <li>{course.materialsNeeded}</li>
+                      </ul>
+                    </li>
                   </ul>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
     );
-  } else {
-    return "Loading...";
   }
-};
-
+}
 export default CourseDetail;

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles/global.css";
+
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "./Context";
 import App from "./App";

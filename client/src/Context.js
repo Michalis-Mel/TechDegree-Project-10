@@ -1,92 +1,71 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { Component } from "react";
 
 import Cookies from "js-cookie";
 import Data from "./Data";
 
-export const MyContext = React.createContext();
+const Context = React.createContext();
 
-export const Provider = (props) => {
-  const history = useHistory();
+export class Provider extends Component {
+  state = {
+    authenticatedUser: Cookies.getJSON("authenticatedUser") || null,
+  };
 
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
-  const [user, setUser] = useState({});
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  constructor() {
+    super();
+    this.data = new Data();
+  }
 
-  const data = new Data();
+  render() {
+    const { authenticatedUser } = this.state;
+    const value = {
+      authenticatedUser,
+      data: this.data,
+      actions: {
+        signIn: this.signIn,
+        signOut: this.signOut,
+      },
+    };
+    return (
+      <Context.Provider value={value}>{this.props.children}</Context.Provider>
+    );
+  }
 
-  const handleSignIn = (e, emailAddress, password) => {
-    if (e) {
-      e.preventDefault();
-    }
-    data
-      .getUser(emailAddress, password)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          let user = res.data;
-
-          setUser(user);
-          setEmailAddress(user.emailAddress);
-          setPassword(user.password);
-          setIsLoggedIn(true);
-          Cookies.set("authenticatedUser", JSON.stringify(user));
-          window.localStorage.setItem("emailAddress", emailAddress);
-          window.localStorage.setItem("password", password);
-
-          history.push("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.status === 400) {
-          history.push("/notfound");
-          console.log("Error Parsing and Fetching Data", err);
-        } else if (err.response.status === 500) {
-          history.push("/error");
-          console.log("Error Parsing and Fetching Data", err);
-        }
+  signIn = async (emailAddress, password) => {
+    const user = await this.data.getUser(emailAddress, password);
+    if (user !== null) {
+      this.setState(() => {
+        return {
+          authenticatedUser: user,
+        };
       });
+      const cookieOptions = {
+        expires: 1, // 1 day
+      };
+      Cookies.set("authenticatedUser", JSON.stringify(user), cookieOptions);
+    }
+    return user;
   };
-  const handleSignOut = () => {
-    window.localStorage.clear();
 
-    setUser({ user });
-    setEmailAddress("user.emailAddress");
-    setPassword("user.password");
-    setIsLoggedIn(false);
+  signOut = () => {
+    this.setState({ authenticatedUser: null });
     Cookies.remove("authenticatedUser");
-
-    history.push("/");
   };
-  return (
-    <MyContext.Provider
-      value={{
-        authenticatedUser,
-        user: user,
-        emailAddress: emailAddress,
-        password: password,
-        isLoggedIn: isLoggedIn,
-        signIn: handleSignIn,
-        signOut: handleSignOut,
-        data: data,
-      }}
-    >
-      {props.children}
-    </MyContext.Provider>
-  );
-};
+}
 
-export const Consumer = MyContext.Consumer;
+export const Consumer = Context.Consumer;
+
+/**
+ * A higher-order component that wraps the provided component in a Context Consumer component.
+ * @param {class} Component - A React component.
+ * @returns {function} A higher-order component.
+ */
 
 export default function withContext(Component) {
   return function ContextComponent(props) {
     return (
-      <MyContext.Consumer>
+      <Context.Consumer>
         {(context) => <Component {...props} context={context} />}
-      </MyContext.Consumer>
+      </Context.Consumer>
     );
   };
 }

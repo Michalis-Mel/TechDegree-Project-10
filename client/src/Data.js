@@ -22,17 +22,23 @@ export default class Data {
     }
 
     if (requiresAuth) {
-      const encodedCredentials = btoa(
-        `${credentials.username}:${credentials.password}`
-      );
+      let encodedCredentials = null;
+      //Checks to see if the credentials passed are the email and password
+      if (credentials.emailAddress && credentials.password) {
+        encodedCredentials = btoa(
+          `${credentials.emailAddress}:${credentials.password}`
+        );
+      } else {
+        encodedCredentials = credentials;
+      }
       options.headers["Authorization"] = `Basic ${encodedCredentials}`;
     }
     return fetch(url, options);
   }
 
-  async getUser(username, password) {
+  async getUser(emailAddress, password) {
     const response = await this.api(`/users`, "GET", null, true, {
-      username,
+      emailAddress,
       password,
     });
     if (response.status === 200) {
@@ -47,13 +53,47 @@ export default class Data {
   async createUser(user) {
     const response = await this.api("/users", "POST", user);
     if (response.status === 201) {
-      return response.status;
+      return [];
     } else if (response.status === 400) {
       return response.json().then((data) => {
-        return data;
+        return data.errors;
       });
     } else {
       throw new Error();
+    }
+  }
+
+  // Retrieves a specific course
+  async getCourse(id) {
+    const course = await this.api(`/courses/${id}`);
+    if (course.status === 200) {
+      return course.json().then((data) => data);
+    } else if (course.status === 401) {
+      return null;
+    } else {
+      // Used for sending down a 500 error
+      return course.status;
+    }
+  }
+
+  // Updates a specific course
+  async updateCourse(courses, credentials, id) {
+    const response = await this.api(
+      `/courses/${id}`,
+      "PUT",
+      courses,
+      true,
+      credentials
+    );
+    if (response.status === 204) {
+      return [];
+    } else if (response.status === 401) {
+      return response.json().then((data) => {
+        return data.errors;
+      });
+    } else {
+      // Used for sending down a 500 error
+      return response.status;
     }
   }
 }
