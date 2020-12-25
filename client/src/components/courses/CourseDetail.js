@@ -58,12 +58,8 @@ class CourseDetail extends Component {
 
   render() {
     const { context } = this.props;
-    let authId = null;
     const authUser = context.authenticatedUser;
-    if (authUser) {
-      const authId = authUser[0].id;
-      console.log(authId);
-    }
+    console.log(authUser);
     const { courses } = this.state;
 
     return (
@@ -73,10 +69,8 @@ class CourseDetail extends Component {
             <div className="actions--bar">
               <div className="bounds">
                 <div className="grid-100">
-                  {console.log(authUser)}
-                  {console.log(authId)}
-                  {console.log(course.User.id)}
-                  {authUser && authId === course.User.id && (
+                  {console.log(course.User)}
+                  {authUser && authUser.id === course.User.id && (
                     <span>
                       <NavLink
                         className="button"

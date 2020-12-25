@@ -62,11 +62,11 @@ app.get(
   authenticateUser,
   asyncHandler(async (req, res) => {
     const currentUser = req.currentUser;
-    const users = await User.findAll({
+    const users = await User.findOne({
       where: {
         emailAddress: currentUser.emailAddress,
       },
-      attributes: ["id", "firstName", "lastName", "emailAddress"],
+      attributes: ["id", "firstName", "lastName", "emailAddress", "password"],
     });
     res.status(200).json(users);
   })
@@ -174,6 +174,7 @@ app.post(
         .location("/api/courses/" + course.id)
         .end();
     } catch (error) {
+      console.log(error);
       if (error.name === "SequelizeValidationError") {
         res.status(400).json({ Error: error.message });
       } else {

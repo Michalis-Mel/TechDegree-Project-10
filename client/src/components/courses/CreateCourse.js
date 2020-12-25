@@ -26,11 +26,13 @@ class CreateCourse extends React.Component {
     e.preventDefault();
     const { context } = this.props;
     const authUser = context.authenticatedUser;
+    console.log(authUser);
     const authUserId = authUser.id;
-    const emailAddress = authUser.emailAddress;
-    const password = authUser.password;
+    const { emailAddress } = authUser;
+    const { password } = authUser;
 
     const data = this.state;
+    console.log(data);
     data.userId = authUserId;
 
     //POST request
@@ -39,29 +41,26 @@ class CreateCourse extends React.Component {
       password,
     });
     console.log(res.status);
-    if (res.status === 200 || res.status === 201) {
-      window.location.href = "/";
-    } else if (res.status === 400) {
-      this.setState({
-        errors: ["Please check that all field inputs are correct"],
-      });
-      return;
-    } else if (res.status === 401 || res.status === 403) {
-      window.location.href = "/forbidden";
-    } else {
-      window.location.href = "/error";
-    }
+    // if (res.status === 200 || res.status === 201) {
+    //   window.location.href = "/";
+    // } else if (res.status === 400) {
+    //   this.setState({
+    //     errors: ["Please check that all field inputs are correct"],
+    //   });
+    //   return;
+    // } else if (res.status === 401 || res.status === 403) {
+    //   window.location.href = "/forbidden";
+    // } else {
+    //   window.location.href = "/error";
+    // }
   };
 
   render() {
     const { title, description, estimatedTime, materialsNeeded } = this.state;
 
     const { context } = this.props;
-    let authUser = null;
-    const authU = context.authenticatedUser;
-    if (authU) {
-      authUser = authU[0];
-    }
+
+    const authUser = context.authenticatedUser;
 
     return (
       <div className="bounds course--detail">
