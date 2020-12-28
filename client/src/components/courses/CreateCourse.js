@@ -25,14 +25,16 @@ class CreateCourse extends React.Component {
   submit = async (e) => {
     e.preventDefault();
     const { context } = this.props;
+
     const authUser = context.authenticatedUser;
-    console.log(authUser);
+    const authPass = context.password;
+
     const authUserId = authUser.id;
     const { emailAddress } = authUser;
-    const { password } = authUser;
+    const { password } = authPass;
 
     const data = this.state;
-    console.log(data);
+
     data.userId = authUserId;
 
     //POST request

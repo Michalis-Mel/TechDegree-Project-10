@@ -66,7 +66,7 @@ app.get(
       where: {
         emailAddress: currentUser.emailAddress,
       },
-      attributes: ["id", "firstName", "lastName", "emailAddress", "password"],
+      attributes: ["id", "firstName", "lastName", "emailAddress"],
     });
     res.status(200).json(users);
   })

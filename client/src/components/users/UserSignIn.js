@@ -70,6 +70,8 @@ export default class UserSignIn extends Component {
 
     const { emailAddress, password } = this.state;
     const { from } = this.props.location.state || { from: { pathname: "/" } };
+    console.log(emailAddress);
+    console.log(password);
 
     context.actions
       .signIn(emailAddress, password)

@@ -22,6 +22,7 @@ export default class Data {
     }
 
     if (requiresAuth) {
+      console.log(credentials);
       let encodedCredentials = null;
       //Checks to see if the credentials passed are the email and password
       if (credentials.emailAddress && credentials.password) {
@@ -31,6 +32,7 @@ export default class Data {
       } else {
         encodedCredentials = credentials;
       }
+      console.log(encodedCredentials);
       options.headers["Authorization"] = `Basic ${encodedCredentials}`;
     }
     return fetch(url, options);
