@@ -60,7 +60,7 @@ class UpdateCourse extends React.Component {
       .get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
       .then((response) => {
         this.setState({
-          courses: response.data,
+          courses: [response.data],
           id: this.props.match.params.id,
         });
       })
@@ -73,6 +73,7 @@ class UpdateCourse extends React.Component {
 
   render() {
     const courses = this.state.courses;
+    console.log(courses);
     const { context } = this.props;
     const authUser = context.authenticatedUser;
     return (
@@ -109,7 +110,7 @@ class UpdateCourse extends React.Component {
                       />
                     </div>
                     <p>
-                      {course.user.firstName} {course.user.lastName}
+                      {course.User.firstName} {course.User.lastName}
                     </p>
                   </div>
                   <div className="course--description">
@@ -159,7 +160,7 @@ class UpdateCourse extends React.Component {
                   </div>
                 </div>
                 <div className="grid-100 pad-bottom">
-                  {authUser && authUser.id === course.user.id && (
+                  {authUser && authUser.id === course.User.id && (
                     <button
                       className="button"
                       type="submit"

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import axios from "axios";
 
 class CourseDetail extends Component {
@@ -59,7 +60,6 @@ class CourseDetail extends Component {
   render() {
     const { context } = this.props;
     const authUser = context.authenticatedUser;
-    console.log(authUser);
     const { courses } = this.state;
 
     return (
@@ -69,7 +69,6 @@ class CourseDetail extends Component {
             <div className="actions--bar">
               <div className="bounds">
                 <div className="grid-100">
-                  {console.log(course.User)}
                   {authUser && authUser.id === course.User.id && (
                     <span>
                       <NavLink
@@ -104,7 +103,7 @@ class CourseDetail extends Component {
                   </p>
                 </div>
                 <div className="course--description">
-                  <p>{course.description}</p>
+                  <ReactMarkdown>{course.description}</ReactMarkdown>
                 </div>
               </div>
               <div className="grid-25 grid-right">
@@ -117,7 +116,11 @@ class CourseDetail extends Component {
                     <li className="course--stats--list--item">
                       <h4>Materials Needed</h4>
                       <ul>
-                        <li>{course.materialsNeeded}</li>
+                        <li>
+                          <ReactMarkdown>
+                            {course.materialsNeeded}
+                          </ReactMarkdown>
+                        </li>
                       </ul>
                     </li>
                   </ul>

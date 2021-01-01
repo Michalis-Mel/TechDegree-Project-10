@@ -25,17 +25,11 @@ class CreateCourse extends React.Component {
   submit = async (e) => {
     e.preventDefault();
     const { context } = this.props;
-    console.log(context);
-    const authUser = context.authenticatedUser;
-    const authPass = context.password;
-    console.log(authUser);
-    console.log(authPass);
 
+    const authUser = context.authenticatedUser;
     const authUserId = authUser.id;
     const emailAddress = authUser.emailAddress;
-    const password = authPass.password;
-    console.log(emailAddress);
-    console.log(password);
+    const password = authUser.password;
 
     const data = this.state;
 
@@ -47,18 +41,18 @@ class CreateCourse extends React.Component {
       password,
     });
     console.log(res.status);
-    // if (res.status === 200 || res.status === 201) {
-    //   window.location.href = "/";
-    // } else if (res.status === 400) {
-    //   this.setState({
-    //     errors: ["Please check that all field inputs are correct"],
-    //   });
-    //   return;
-    // } else if (res.status === 401 || res.status === 403) {
-    //   window.location.href = "/forbidden";
-    // } else {
-    //   window.location.href = "/error";
-    // }
+    if (res.status === 200 || res.status === 201) {
+      window.location.href = "/";
+    } else if (res.status === 400) {
+      this.setState({
+        errors: ["Please check that all field inputs are correct"],
+      });
+      return;
+    } else if (res.status === 401 || res.status === 403) {
+      window.location.href = "/forbidden";
+    } else {
+      window.location.href = "/error";
+    }
   };
 
   render() {

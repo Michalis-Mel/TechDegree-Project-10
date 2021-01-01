@@ -202,7 +202,7 @@ svg {
 /* line 5, ../sass/global.sass */
 body {
   font-family: "Work Sans", sans-serif;
-  background: #fff;
+  background: rgb(255, 255, 255);
 }
 
 /* line 13, ../sass/global.sass */
@@ -261,7 +261,8 @@ body {
   margin-top: -30px;
 }
 /* line 2, ../sass/mixins.sass */
-.actions--bar:before, .actions--bar:after {
+.actions--bar:before,
+.actions--bar:after {
   content: " ";
   display: table;
 }
@@ -305,7 +306,11 @@ p {
 }
 
 /* line 74, ../sass/global.sass */
-.grid, .grid-25, .grid-33, .grid-66, .grid-100 {
+.grid,
+.grid-25,
+.grid-33,
+.grid-66,
+.grid-100 {
   float: left;
   padding: 0 15px;
   box-sizing: border-box;
@@ -349,7 +354,8 @@ p {
   box-sizing: border-box;
 }
 /* line 2, ../sass/mixins.sass */
-.course--module:before, .course--module:after {
+.course--module:before,
+.course--module:after {
   content: " ";
   display: table;
 }
@@ -386,20 +392,22 @@ p {
 }
 /* line 133, ../sass/global.sass */
 .course--add--module {
+  width: 400px;
+  margin-right: 0;
   background: #eee;
   text-align: center;
 }
 /* line 137, ../sass/global.sass */
 .course--add--module:hover .course--add--title {
-  color: #444;
+  color: rgb(0, 0, 0);
 }
 /* line 139, ../sass/global.sass */
 .course--add--module:hover .add {
-  fill: #444;
+  fill: black;
 }
 /* line 141, ../sass/global.sass */
 .course--add--title {
-  color: #999;
+  color: rgb(138, 112, 148);
   display: inline-block;
   font-size: 18px;
   position: absolute;
@@ -415,7 +423,7 @@ p {
   width: 13px;
   height: auto;
   margin: 0 5px 0 0;
-  fill: #999;
+  fill: rgb(138, 112, 148);
 }
 /* line 159, ../sass/global.sass */
 .course--detail {
@@ -478,7 +486,8 @@ p {
   font-family: "Cousine";
 }
 /* line 2, ../sass/mixins.sass */
-.course--description li:before, .course--description li:after {
+.course--description li:before,
+.course--description li:after {
   content: " ";
   display: table;
 }
