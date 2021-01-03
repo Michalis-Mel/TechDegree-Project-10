@@ -108,20 +108,20 @@ export default class UserSignUp extends Component {
       confirmPassword,
     } = this.state;
 
-    if (
-      firstName === "" ||
-      lastName === "" ||
-      emailAddress === "" ||
-      password === "" ||
-      confirmPassword === ""
-    ) {
-      this.setState({
-        errors: [
-          "Missing information - Please check all fields are entered correctly",
-        ],
-      });
-      return;
-    }
+    // if (
+    //   firstName === "" ||
+    //   lastName === "" ||
+    //   emailAddress === "" ||
+    //   password === "" ||
+    //   confirmPassword === ""
+    // ) {
+    //   this.setState({
+    //     errors: [
+    //       "Missing information - Please check all fields are entered correctly",
+    //     ],
+    //   });
+    //   return;
+    // }
 
     let user = {
       firstName,
@@ -131,19 +131,19 @@ export default class UserSignUp extends Component {
     };
 
     // Show error message if password and confirm password don't match
-    if (password !== confirmPassword) {
-      this.setState({
-        errors: ["Passwords do not match. Please re-confirm"],
-      });
-      return;
-    } else {
-      user = {
-        firstName,
-        lastName,
-        emailAddress,
-        password,
-      };
-    }
+    // if (password !== confirmPassword) {
+    //   this.setState({
+    //     errors: ["Passwords do not match. Please re-confirm"],
+    //   });
+    //   return;
+    // } else {
+    //   user = {
+    //     firstName,
+    //     lastName,
+    //     emailAddress,
+    //     password,
+    //   };
+    // }
 
     context.data
       .createUser(user)
