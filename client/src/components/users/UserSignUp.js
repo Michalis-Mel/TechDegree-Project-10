@@ -26,20 +26,6 @@ export default class UserSignUp extends Component {
       <div className="bounds">
         <div className="grid-33 centered signin">
           <h1>Sign Up</h1>
-          {this.state.errors.length ? (
-            <div>
-              <h2 className="validation--errors--label">
-                Error creating account:
-              </h2>
-              <div className="validation-errors">
-                <ul>
-                  {this.state.errors.map((error, i) => (
-                    <li key={i}>{error}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ) : null}
           <Form
             cancel={this.cancel}
             errors={errors}

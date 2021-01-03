@@ -40,7 +40,9 @@ function ErrorsDisplay({ errors }) {
   if (errors.length) {
     errorsDisplay = (
       <div>
-        <h2 className="validation--errors--label">Validation error:</h2>
+        <h2 className="validation--errors--label">
+          Error Creating Your Account:
+        </h2>
         <div className="validation-errors">
           <ul>
             {errors.map((error, i) => (
