@@ -11,6 +11,7 @@ class CourseDetail extends Component {
     };
   }
 
+  //Get the course details from the api when the page loads
   componentDidMount() {
     axios
       .get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
@@ -30,7 +31,7 @@ class CourseDetail extends Component {
       });
   }
 
-  //delete button function
+  //delete button function that deletes the course from the api if the user is the author
   delete = async (e) => {
     e.preventDefault();
     const { context } = this.props;

@@ -3,11 +3,13 @@ import React from "react";
 export default (props) => {
   const { cancel, errors, submit, submitButtonText, elements } = props;
 
+  //The submit function from the signUp component is called
   function handleSubmit(event) {
     event.preventDefault();
     submit();
   }
 
+  //The cancel function from the signUp component is called
   function handleCancel(event) {
     event.preventDefault();
     cancel();
@@ -31,6 +33,7 @@ export default (props) => {
   );
 };
 
+//ErrorDisplay function checks if there are any errors with the inputs and then render the errors if they exist
 function ErrorsDisplay({ errors }) {
   let errorsDisplay = null;
 

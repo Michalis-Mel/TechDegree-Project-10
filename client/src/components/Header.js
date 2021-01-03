@@ -18,14 +18,14 @@ class Header extends React.PureComponent {
                     <span>
                       Welcome, {authUser.firstName} {authUser.lastName}!
                     </span>
-                    <NavLink to="/sign-out">Sign Out</NavLink>
+                    <NavLink to="/signout">Sign Out</NavLink>
                   </>
                 ) : (
                   <>
-                    <NavLink className="signup" to="/sign-up">
+                    <NavLink className="signup" to="/signup">
                       Sign Up
                     </NavLink>
-                    <NavLink className="signin" to="/sign-in">
+                    <NavLink className="signin" to="/signin">
                       Sign In
                     </NavLink>
                   </>

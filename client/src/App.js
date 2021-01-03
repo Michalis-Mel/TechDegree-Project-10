@@ -45,9 +45,9 @@ class App extends React.Component {
             component={UpdateCourseWithContext}
           />
           <Route path="/courses/:id" component={CourseDetailWithContext} />
-          <Route path="/sign-up" component={UserSignUpWithContext} />
-          <Route path="/sign-in" component={UserSignInWithContext} />
-          <Route path="/sign-out" component={UserSignOutWithContext} />
+          <Route path="/signup" component={UserSignUpWithContext} />
+          <Route path="/signin" component={UserSignInWithContext} />
+          <Route path="/signout" component={UserSignOutWithContext} />
           <Route path="/error" component={ErrorHandler} />
           <Route path="/forbidden" component={Forbidden} />
           <Route component={NotFound} />

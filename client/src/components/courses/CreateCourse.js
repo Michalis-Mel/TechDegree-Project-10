@@ -10,6 +10,7 @@ class CreateCourse extends React.Component {
     errors: [],
   };
 
+  //The change method changes the state of the name with each input
   change = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -41,6 +42,7 @@ class CreateCourse extends React.Component {
       password,
     });
     console.log(res.status);
+    console.log(res);
     if (res.status === 200 || res.status === 201) {
       window.location.href = "/";
     } else if (res.status === 400) {

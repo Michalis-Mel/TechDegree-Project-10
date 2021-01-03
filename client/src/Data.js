@@ -36,6 +36,7 @@ export default class Data {
     return fetch(url, options);
   }
 
+  //Function that sends the email and password to the api and gets back a user or an error
   async getUser(emailAddress, password) {
     const response = await this.api(`/users`, "GET", null, true, {
       emailAddress,
@@ -50,6 +51,7 @@ export default class Data {
     }
   }
 
+  //Function that sends the user to the api and gets back a response that says if the user was added to the api or not
   async createUser(user) {
     const response = await this.api("/users", "POST", user);
     if (response.status === 201) {

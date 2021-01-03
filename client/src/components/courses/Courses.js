@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 class Courses extends React.Component {
   state = {
     courses: [],
   };
 
+  //Get the courses from the api and save them to the courses state
   getCourses = () => {
     axios
       .get("http://localhost:5000/api/courses")
@@ -23,6 +25,7 @@ class Courses extends React.Component {
       );
   };
 
+  //call the getCourses function when the page loads
   componentDidMount() {
     this.getCourses();
   }
@@ -46,9 +49,9 @@ class Courses extends React.Component {
             </div>
           ))}
           <div className="grid-33">
-            <a
+            <NavLink
               className="course--module course--add--module"
-              href="/courses/create"
+              to="/courses/create"
             >
               <h3 className="course--add--title">
                 <svg
@@ -63,7 +66,7 @@ class Courses extends React.Component {
                 </svg>
                 New Course
               </h3>
-            </a>
+            </NavLink>
           </div>
         </div>
       );

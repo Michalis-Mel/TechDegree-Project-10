@@ -99,6 +99,7 @@ export default class UserSignUp extends Component {
     );
   }
 
+  //The change method changes the state of the name with each input
   change = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -110,6 +111,7 @@ export default class UserSignUp extends Component {
     });
   };
 
+  //The submit function calls the createUser function so the user can be created in the api
   submit = () => {
     const { context } = this.props;
     const {
@@ -160,6 +162,7 @@ export default class UserSignUp extends Component {
     context.data
       .createUser(user)
       .then((errors) => {
+        console.log(errors);
         if (errors.length) {
           this.setState({ errors });
         } else {
@@ -174,6 +177,7 @@ export default class UserSignUp extends Component {
       });
   };
 
+  //The cancer method returns us to the /courses page
   cancel = () => {
     this.props.history.push("/");
   };

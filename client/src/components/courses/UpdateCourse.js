@@ -11,6 +11,7 @@ class UpdateCourse extends React.Component {
     };
   }
 
+  //The change method changes the state of the name with each input
   change = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -22,6 +23,7 @@ class UpdateCourse extends React.Component {
     });
   };
 
+  //The submit method sends a put request to the api and changes the course's details if the authenticated user is the author and
   submit = async (e) => {
     e.preventDefault();
     const { context } = this.props;
@@ -41,6 +43,8 @@ class UpdateCourse extends React.Component {
       true,
       { emailAddress, password }
     );
+
+    console.log(res);
     if (res.status === 204) {
       window.location.href = `/courses/${this.props.match.params.id}`;
     } else if (res.status === 400) {
@@ -73,7 +77,7 @@ class UpdateCourse extends React.Component {
 
   render() {
     const courses = this.state.courses;
-    console.log(courses);
+
     const { context } = this.props;
     const authUser = context.authenticatedUser;
     return (

@@ -47,13 +47,13 @@ export default class UserSignIn extends Component {
           <p>&nbsp;</p>
           <p>
             Don't have a user account?{" "}
-            <NavLink to="/sign-up">Click here</NavLink> to sign up!
+            <NavLink to="/signup">Click here</NavLink> to sign up!
           </p>
         </div>
       </div>
     );
   }
-
+  //The change method changes the state of the name with each input
   change = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -65,6 +65,7 @@ export default class UserSignIn extends Component {
     });
   };
 
+  //The submit function calls the signIn function so the user can be logged in the api
   submit = () => {
     const { context } = this.props;
 
@@ -90,6 +91,7 @@ export default class UserSignIn extends Component {
       });
   };
 
+  //The cancer method returns us to the /courses page
   cancel = () => {
     this.props.history.push("/");
   };

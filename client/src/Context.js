@@ -32,6 +32,8 @@ export class Provider extends Component {
     );
   }
 
+  // Sign in function that sends the email and the password to the api and authenticate the user so he can log in
+  // A cookie is set that expires in 1 day
   signIn = async (emailAddress, password) => {
     const user = await this.data.getUser(emailAddress, password);
     if (user !== null) {
@@ -49,6 +51,7 @@ export class Provider extends Component {
     return user;
   };
 
+  //Sign out function that log the authenticated user off
   signOut = () => {
     this.setState({ authenticatedUser: null });
     Cookies.remove("authenticatedUser");
