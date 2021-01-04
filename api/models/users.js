@@ -1,68 +1,66 @@
-'use strict';
-const Sequelize = require('sequelize');
+"use strict";
+const Sequelize = require("sequelize");
 
 //Creating and exporting the user model
 module.exports = (sequelize) => {
-    class User extends Sequelize.Model {}
+  class User extends Sequelize.Model {}
 
-    User.init({
-        id: {
-            type: Sequelize.DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false
+  User.init(
+    {
+      id: {
+        type: Sequelize.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      firstName: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please enter a user first name",
+          },
         },
-        firstName: {
-            type: Sequelize.DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: {
-                  msg: "Please enter a user first name",
-                }
-              }
+      },
+      lastName: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please enter a user last name",
+          },
         },
-        lastName: {
-            type: Sequelize.DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: {
-                  msg: "Please enter a user last name",
-                }
-              }
+      },
+      emailAddress: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: {
+            msg: "Please enter a valid email address",
+          },
         },
-        emailAddress: {
-            type: Sequelize.DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: {
-                  msg: "Please enter a valid email",
-                },
-                isEmail: {
-                  msg: "Please enter a valid email address"
-                }
-              }
+      },
+      password: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please enter a password",
+          },
         },
-        password: {
-            type: Sequelize.DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: {
-                  msg: "Please enter a password",
-                }
-              }
-        }
+      },
     },
-    {sequelize});
+    { sequelize }
+  );
 
-    User.associate = (models) => {
-        User.hasMany(models.Course,
-            {foreignKey: {
-              fieldName: "userId",
-              allowNull: false
-              }
-            }
-        )
-    };
+  User.associate = (models) => {
+    User.hasMany(models.Course, {
+      foreignKey: {
+        fieldName: "userId",
+        allowNull: false,
+      },
+    });
+  };
 
-    return User
+  return User;
 };

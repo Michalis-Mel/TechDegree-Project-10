@@ -108,59 +108,36 @@ export default class UserSignUp extends Component {
       confirmPassword,
     } = this.state;
 
-    // if (
-    //   firstName === "" ||
-    //   lastName === "" ||
-    //   emailAddress === "" ||
-    //   password === "" ||
-    //   confirmPassword === ""
-    // ) {
-    //   this.setState({
-    //     errors: [
-    //       "Missing information - Please check all fields are entered correctly",
-    //     ],
-    //   });
-    //   return;
-    // }
-
     let user = {
       firstName,
       lastName,
       emailAddress,
       password,
+      confirmPassword,
     };
 
     // Show error message if password and confirm password don't match
-    // if (password !== confirmPassword) {
-    //   this.setState({
-    //     errors: ["Passwords do not match. Please re-confirm"],
-    //   });
-    //   return;
-    // } else {
-    //   user = {
-    //     firstName,
-    //     lastName,
-    //     emailAddress,
-    //     password,
-    //   };
-    // }
-
-    context.data
-      .createUser(user)
-      .then((errors) => {
-        console.log(errors);
-        if (errors.length) {
-          this.setState({ errors });
-        } else {
-          context.actions.signIn(emailAddress, password).then(() => {
-            this.props.history.push("/");
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        this.props.history.push("/error");
+    if (user.password !== user.confirmPassword) {
+      this.setState({
+        errors: ["Passwords do not match"],
       });
+    } else {
+      context.data
+        .createUser(user)
+        .then((errors) => {
+          if (errors.length > 0) {
+            this.setState({ errors });
+          } else {
+            context.actions.signIn(emailAddress, password).then(() => {
+              this.props.history.push("/");
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.props.history.push("/error");
+        });
+    }
   };
 
   //The cancer method returns us to the /courses page

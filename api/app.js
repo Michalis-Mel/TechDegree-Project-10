@@ -97,12 +97,17 @@ app.post(
         await User.create(user);
         res.status(201).location("/").end();
       } else {
-        res.status(400).json({ Error: "Woops, that email already exists" });
+        const error = new Error("The email already exists");
+        error.status = 400;
+        throw error;
       }
     } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        console.log(req.body);
-        res.status(400).json({ Error: error.message });
+      if (
+        error.name === "SequelizeValidationError" ||
+        error.name === "SequelizeUniqueConstraintError"
+      ) {
+        const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ errors });
       } else {
         throw error;
       }
