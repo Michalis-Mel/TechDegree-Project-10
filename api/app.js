@@ -180,8 +180,12 @@ app.post(
         .end();
     } catch (error) {
       console.log(error);
-      if (error.name === "SequelizeValidationError") {
-        res.status(400).json({ Error: error.message });
+      if (
+        error.name === "SequelizeValidationError" ||
+        error.name === "SequelizeUniqueConstraintError"
+      ) {
+        const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ errors });
       } else {
         throw error;
       }
@@ -190,39 +194,33 @@ app.post(
 );
 
 //Updates a course and returns no content
-//Using express-validator to make sure that the title and the description of the body are not empty
 app.put(
   "/api/courses/:id",
   authenticateUser,
-  [
-    body("title").notEmpty().withMessage("Please enter a title"),
-    body("description").notEmpty().withMessage("Please enter a description"),
-  ],
   asyncHandler(async (req, res) => {
     try {
-      let course = await Course.findByPk(req.params.id);
+      const course = await Course.findByPk(req.params.id);
       if (course) {
         if (course.userId === req.currentUser.id) {
-          const errors = validationResult(req);
-          if (!errors.isEmpty()) {
-            const errorArray = errors.array();
-            const message = errorArray.map((error) => error.msg);
-            return res.status(400).json({ Error: message });
-          } else {
-            await course.update(req.body);
-            res.status(204).end();
-          }
+          await course.update(req.body);
+          res.status(204).end();
         } else {
-          res
-            .status(403)
-            .json({ Error: "You are not authorized to edit this course" });
+          res.status(403).end();
         }
       } else {
-        res.status(404).end();
+        const error = new Error(
+          "The course you are looking for does not exist."
+        );
+        error.status = 404;
+        throw error;
       }
     } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        res.json({ Error: error.message });
+      if (
+        error.name === "SequelizeValidationError" ||
+        error.name === "SequelizeUniqueConstraintError"
+      ) {
+        const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ errors });
       } else {
         throw error;
       }

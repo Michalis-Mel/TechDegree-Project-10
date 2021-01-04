@@ -27,36 +27,44 @@ class UpdateCourse extends React.Component {
   submit = async (e) => {
     e.preventDefault();
     const { context } = this.props;
-    const authUser = context.authenticatedUser;
-    const authUserId = authUser.id;
-    const emailAddress = authUser.emailAddress;
-    const password = authUser.password;
 
-    const data = this.state;
-    data.userId = authUserId;
+    const {
+      title,
+      description,
+      estimatedTime,
+      materialsNeeded,
+      id,
+    } = this.state;
 
-    //PUT request
-    const res = await context.data.api(
-      `/courses/${this.props.match.params.id}`,
-      "PUT",
-      data,
-      true,
-      { emailAddress, password }
-    );
+    const emailAddress = context.authenticatedUser.emailAddress;
+    const password = context.authenticatedUser.password;
+    const userId = context.authenticatedUser.id;
+    const course = {
+      title,
+      description,
+      estimatedTime,
+      materialsNeeded,
+      id,
+      userId,
+    };
 
-    console.log(res);
-    if (res.status === 204) {
-      window.location.href = `/courses/${this.props.match.params.id}`;
-    } else if (res.status === 400) {
-      this.setState({
-        errors: ["Fill out all required fields."],
+    context.data
+      .updateCourse(course, emailAddress, password)
+      .then((errors) => {
+        if (errors.length > 0) {
+          this.setState({ errors });
+        } else {
+          this.props.history.push(`/courses/${this.props.match.params.id}`);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        if (error.response.status === 401 || error.response.status === 403) {
+          this.props.history.push("/forbidden");
+        } else {
+          this.props.history.push("/error");
+        }
       });
-      return;
-    } else if (res.status === 401 || res.status === 403) {
-      window.location.href = "/forbidden";
-    } else {
-      window.location.href = "/error";
-    }
   };
 
   componentDidMount() {

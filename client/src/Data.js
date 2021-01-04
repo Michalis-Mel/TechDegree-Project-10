@@ -65,6 +65,23 @@ export default class Data {
     }
   }
 
+  //Function that sends the new course to the api and gets back a response that says if the course was added to the api or not
+  async createCourse(course, emailAddress, password) {
+    const response = await this.api(`/courses`, "POST", course, true, {
+      emailAddress,
+      password,
+    });
+    if (response.status === 201) {
+      return [];
+    } else if (response.status === 400) {
+      return response.json().then((data) => {
+        return data.errors;
+      });
+    } else {
+      throw new Error();
+    }
+  }
+
   // Retrieves a specific course
   async getCourse(id) {
     const course = await this.api(`/courses/${id}`);
@@ -79,23 +96,26 @@ export default class Data {
   }
 
   // Updates a specific course
-  async updateCourse(courses, credentials, id) {
+  async updateCourse(course, emailAddress, password) {
     const response = await this.api(
-      `/courses/${id}`,
+      `/courses/${course.id}`,
       "PUT",
-      courses,
+      course,
       true,
-      credentials
+      { emailAddress, password }
     );
     if (response.status === 204) {
       return [];
-    } else if (response.status === 401) {
+    } else if (
+      response.status === 400 ||
+      response.status === 401 ||
+      response.status === 403
+    ) {
       return response.json().then((data) => {
         return data.errors;
       });
     } else {
-      // Used for sending down a 500 error
-      return response.status;
+      throw new Error();
     }
   }
 }
