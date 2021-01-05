@@ -97,9 +97,7 @@ app.post(
         await User.create(user);
         res.status(201).location("/").end();
       } else {
-        const error = new Error("The email already exists");
-        error.status = 400;
-        throw error;
+        res.status(400).send({ errors: ["Email already exists"] });
       }
     } catch (error) {
       if (
